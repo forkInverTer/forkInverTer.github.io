@@ -14,20 +14,53 @@
       }
 
       :root {
-        --bg: #f9fafb;
-        --text: #111827;
+        --bg: #000;
+        --text: #ff9900;
       }
+
       * {
         box-sizing: border-box;
       }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
       body {
         font-family: "SpicyFork", system-ui, -apple-system, "Segoe UI", Roboto,
           Helvetica, Arial, sans-serif;
         color: var(--text);
-        margin: 0;
-        padding: 2rem;
         background: var(--bg);
+        padding: 4rem 2rem 2rem;
       }
+
+      .site-header {
+        position: fixed;
+        inset: 0 auto auto 0;
+        padding: 1rem 2rem;
+        z-index: 1001;
+      }
+      .logo {
+        display: inline-flex;
+        font-size: 1.75rem;
+        font-weight: 800;
+        line-height: 1;
+        text-decoration: none;
+        user-select: none;
+      }
+      .logo-left {
+        padding: 0.2rem 0.55rem;
+        background: #000;
+        color: #fff;
+      }
+      .logo-right {
+        padding: 0.2rem 0.55rem;
+        background: #ff9900;
+        color: #000;
+      }
+
       h1 {
         text-align: center;
         margin-bottom: 2rem;
@@ -103,6 +136,13 @@
     </style>
   </head>
   <body>
+    <!-- Fixed logo in the top‑left corner -->
+    <header class="site-header">
+      <a href="#" class="logo" aria-label="Fork Hub Home">
+        <span class="logo-left">fork</span><span class="logo-right">hub</span>
+      </a>
+    </header>
+
     <h1>Mah! Have a look at all of Kongligs forks</h1>
 
     <div id="gallery"></div>
