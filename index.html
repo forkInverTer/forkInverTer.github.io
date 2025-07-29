@@ -1,1 +1,172 @@
-<h1>Mah!</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="img/mah.ico" type="image/x-icon" sizes="256x256" />
+    <meta charset="utf-8" />
+    <title>The Spiciest Fork Pics</title>
+    <style>
+      @font-face {
+        font-family: "SpicyFork";
+        src: url("fonts/Hatolie.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        --bg: #f9fafb;
+        --text: #111827;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "SpicyFork", system-ui, -apple-system, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        color: var(--text);
+        margin: 0;
+        padding: 2rem;
+        background: var(--bg);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      #gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+      #gallery img {
+        width: 240px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      #gallery img:hover {
+        transform: scale(1.03);
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+      }
+      .lightbox.hidden {
+        display: none;
+      }
+
+      .lightbox-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        text-align: center;
+        color: white;
+      }
+      .lightbox-content img {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 8px;
+      }
+      .lightbox-caption {
+        margin-top: 1rem;
+        font-size: 1rem;
+      }
+      .close-btn {
+        position: absolute;
+        top: -24px;
+        right: -24px;
+        font-size: 2rem;
+        line-height: 1;
+        background: #fff;
+        color: #000;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .close-btn:hover {
+        background: #f3f4f6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mah! Have a look at all of Kongligs forks</h1>
+
+    <div id="gallery"></div>
+
+    <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
+      <div class="lightbox-content">
+        <span id="lightbox-close" class="close-btn" aria-label="Close"
+          >&times;</span
+        >
+        <img id="lightbox-img" src="" alt="" />
+        <p id="lightbox-caption" class="lightbox-caption"></p>
+      </div>
+    </div>
+
+    <script>
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+      const closeBtn = document.getElementById("lightbox-close");
+      const gallery = document.getElementById("gallery");
+
+      async function loadGallery() {
+        try {
+          const res = await fetch("gallery.json");
+          if (!res.ok) throw new Error("Gallery data not found");
+          const photos = await res.json();
+
+          photos.forEach((p) => {
+            const img = document.createElement("img");
+            img.src = p.img;
+            img.alt = p.name || "";
+            img.dataset.caption = p.description || "";
+            img.loading = "lazy";
+            gallery.appendChild(img);
+          });
+        } catch (err) {
+          console.error("Gallery load error", err);
+          gallery.textContent =
+            "MAH!!! Mux fucked up, and now the website is broken.";
+        }
+      }
+
+      gallery.addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG") {
+          const img = e.target;
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightboxCaption.textContent = img.dataset.caption;
+          lightbox.classList.remove("hidden");
+        }
+      });
+
+      function closeLightbox() {
+        lightbox.classList.add("hidden");
+      }
+      closeBtn.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener("keyup", (e) => {
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      loadGallery();
+    </script>
+  </body>
+</html>
